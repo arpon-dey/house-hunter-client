@@ -1,4 +1,6 @@
+import axios from 'axios';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import registration from '../../assets/house2.png';
 const Registration = () => {
     const handleRegister = (e) =>{
@@ -7,8 +9,30 @@ const Registration = () => {
         const name = form.name.value
         const email = form.email.value
         const password = form.password.value
-        const userData = {name,email, password}
+        const photo = form.photo.value
+        const userData = {name,email, password, photo}
         console.log(userData);
+
+        axios.post('http://localhost:5000/users', userData)
+    .then(res => {
+        console.log(res.data);
+        if (res.data.insertedId) {
+            Swal.fire(
+                'Good job!',
+                'User added successfully',
+                'success'
+            );
+        }
+    })
+    .catch(error => {
+        console.error('Error adding user:', error);
+        Swal.fire(
+            'Oops...',
+            'Something went wrong! Please try again.',
+            'error'
+        );
+    });
+
     }
     return (
         <div>
@@ -29,15 +53,15 @@ const Registration = () => {
                             </div>
                             <div className="form-control">
                                
-                                <input type="file" placeholder="email" className="input input-bordered pt-2" required />
+                                <input type="text" placeholder="add your image link" name='photo' className="input input-bordered pt-2" required />
                             </div>
                             <div className="form-control">
                                
-                                <input type="email" placeholder="email" className="input input-bordered" required />
+                                <input type="email" placeholder="email" name='email' className="input input-bordered" required />
                             </div>
                             <div className="form-control">
                                 
-                                <input type="password" placeholder="password" className="input input-bordered" required />
+                                <input type="password" placeholder="password" name='password' className="input input-bordered" required />
                                 
                             </div>
                             <div className="form-control mt-6">
